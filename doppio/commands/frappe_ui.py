@@ -38,7 +38,7 @@ def add_frappe_ui_starter(name, scaffold, app):
 
 def replace_placeholders_in_starter(app, name):
     spa_path = Path("../apps", app, name)
-    files = ("vite.config.js", "src/router.js")
+    files = ("vite.config.js", "src/router.js", "src/router.ts")
 
     replacement_map = {
         "<app_name>": app,
@@ -49,10 +49,13 @@ def replace_placeholders_in_starter(app, name):
     for file in files:
         file_path = spa_path / file
         fixed_content = ""
-        with file_path.open("r") as f:
-            content = f.read()
-            for placeholder, replacement in replacement_map.items():
-                content = content.replace(placeholder, replacement)
-            fixed_content = content
-        with file_path.open("w") as f:
-            f.write(fixed_content)
+        try:
+            with file_path.open("r") as f:
+                content = f.read()
+                for placeholder, replacement in replacement_map.items():
+                    content = content.replace(placeholder, replacement)
+                fixed_content = content
+            with file_path.open("w") as f:
+                f.write(fixed_content)
+        except FileNotFoundError:
+            pass
