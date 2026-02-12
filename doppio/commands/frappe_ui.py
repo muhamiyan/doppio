@@ -7,15 +7,16 @@ from .utils import add_commands_to_root_package_json, add_routing_rule_to_hooks
 
 
 @click.command("add-frappe-ui")
+@click.option("--scaffold", default="NagariaHussain/doppio_frappeui_starter", prompt="Scaffold Starter")
 @click.option("--name", default="frontend", prompt="Dashboard Name")
 @click.option("--app", prompt="App Name")
-def add_frappe_ui(name, app):
+def add_frappe_ui(name, scaffold, app):
     if not app:
         click.echo("Please provide an app with --app")
         return
 
     click.echo(f"Adding Frappe UI starter to {app}...")
-    add_frappe_ui_starter(name, app)
+    add_frappe_ui_starter(name, scaffold, app)
 
     click.echo(
         f"🖥️  You can start the dev server by running 'yarn dev' in apps/{app}/{name}"
@@ -23,9 +24,9 @@ def add_frappe_ui(name, app):
     click.echo("📄  Docs: https://ui.frappe.io")
 
 
-def add_frappe_ui_starter(name, app):
+def add_frappe_ui_starter(name, scaffold, app):
     subprocess.run(
-        ["npx", "degit", "NagariaHussain/doppio_frappeui_starter", name],
+        ["npx", "degit", scaffold, name],
         cwd=Path("../apps", app),
     )
     subprocess.run(["yarn"], cwd=Path("../apps", app, name))
